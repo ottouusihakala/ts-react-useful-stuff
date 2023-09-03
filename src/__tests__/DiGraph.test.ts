@@ -82,4 +82,18 @@ describe('DiGraph', () => {
       expect(graph.adjacents.get(3)).not.toContain(2)
     })
   })
+
+  describe('Depth-first search', () => {
+    it('Visits each vertex once', () => {
+      const graph = new DiGraph()
+      graph.addEdge(1, 2)
+      graph.addEdge(2, 3)
+      graph.addEdge(3, 4)
+      graph.addEdge(2, 4)
+      graph.addEdge(1, 4)
+      const visited = graph.depthFirstSearch()
+      console.log(visited)
+      expect(visited.filter((v) => v === 1).length).toBe(1)
+    })
+  })
 })

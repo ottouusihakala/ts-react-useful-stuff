@@ -38,6 +38,22 @@ class DiGraph {
       })
     }
   }
+
+  depthFirstSearch() {
+    const visited: Number[] = []
+
+    const search = (vertex: Number | undefined) => {
+      if (!vertex || visited.includes(vertex)) {
+        return
+      }
+      visited.push(vertex)
+      this.adjacents.get(vertex)?.forEach(search)
+    }
+
+    this.vertices.forEach(search)
+
+    return visited
+  }
 }
 
 export default DiGraph
