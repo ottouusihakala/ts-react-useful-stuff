@@ -1,6 +1,6 @@
-import DiGraph from "../DiGraph"
+import DiGraph from "../NumberDiGraph"
 
-describe('DiGraph', () => {
+describe('NumberDiGraph', () => {
   describe('addEdge', () => {
     it('Adds vertices', () => {
       const graph = new DiGraph()
@@ -93,7 +93,24 @@ describe('DiGraph', () => {
       graph.addEdge(1, 4)
       const visited = graph.depthFirstSearch()
       console.log(visited)
-      expect(visited.filter((v) => v === 1).length).toBe(1)
+      expect(visited.filter((v) => v === 1).length).toBe(1) // visit 1 once
+      expect(visited).toStrictEqual([1, 2, 3, 4])
+    })
+  })
+
+  describe('Breadth-first search', () => {
+    it('Visits each vertex once', () => {
+      const graph = new DiGraph()
+      graph.addEdge(1, 2)
+      graph.addEdge(1, 3)
+      graph.addEdge(2, 4)
+      graph.addEdge(4, 5)
+      graph.addEdge(3, 5)
+      graph.addEdge(5, 1)
+      const visited = graph.breadthFirstSearch()
+      console.log('visited', visited)
+      expect(visited.filter((v) => v === 1).length).toBe(1) // visit 1 once
+      expect(visited).toStrictEqual([1, 2, 3, 4, 5])
     })
   })
 })

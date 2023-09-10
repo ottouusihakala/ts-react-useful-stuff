@@ -1,13 +1,13 @@
 class DiGraph {
-  vertices: Number[]
-  adjacents: Map<Number, Number[]>
+  vertices: number[]
+  adjacents: Map<number, number[]>
   
   constructor() {
     this.vertices = []
     this.adjacents = new Map()
   }
 
-  addEdge(originVertex: Number, destinationVertex: Number) {
+  addEdge(originVertex: number, destinationVertex: number) {
     this.vertices.push(originVertex)
     this.vertices.push(destinationVertex)
     const adjacentsForOrigin = this.adjacents.get(originVertex) || []
@@ -17,18 +17,18 @@ class DiGraph {
     this.adjacents.set(originVertex, adjacentsForOrigin)
   }
 
-  addVertex(vertex: Number) {
+  addVertex(vertex: number) {
     this.vertices.push(vertex)
   }
 
-  removeEdge(origin: Number, destination: Number) {
+  removeEdge(origin: number, destination: number) {
     const adjacentsForOrigin = this.adjacents.get(origin)
     if (adjacentsForOrigin) {
       this.adjacents.set(origin, adjacentsForOrigin.filter((v) => v !== destination))
     }
   }
 
-  removeVertex(vertex: Number) {
+  removeVertex(vertex: number) {
     const vertexIndex = this.vertices.findIndex((v) => v === vertex)
     if (vertexIndex > -1) {
       this.vertices.splice(vertexIndex)
@@ -40,9 +40,9 @@ class DiGraph {
   }
 
   depthFirstSearch() {
-    const visited: Number[] = []
+    const visited: number[] = []
 
-    const search = (vertex: Number | undefined) => {
+    const search = (vertex: number | undefined) => {
       if (!vertex || visited.includes(vertex)) {
         return
       }
@@ -51,6 +51,40 @@ class DiGraph {
     }
 
     this.vertices.forEach(search)
+
+    return visited
+  }
+
+  breadthFirstSearch() {
+    const visited: number[] = []
+
+    const search = (vertex: number | undefined) => {
+      const queue: number[] = []
+
+      if (!vertex || visited.includes(vertex)) {
+        return
+      }
+
+      queue.push(vertex)
+      visited.push(vertex)
+      
+      while (queue.length > 0) {
+        const currentVertex = queue.shift()
+
+        if (!currentVertex) {
+          return
+        }
+
+        this.adjacents.get(currentVertex)?.forEach((adjVertex) => {
+          if (!visited.includes(adjVertex)) {
+            visited.push(adjVertex)
+            queue.push(adjVertex)
+          }
+        })
+      }
+    }
+
+    this.vertices.forEach((vertex) => search(vertex))
 
     return visited
   }
