@@ -1,17 +1,3 @@
-class GraphNode<T> {
-  adjacents: GraphNode<T>[]
-  data: T
-
-  constructor(data: T) {
-    this.adjacents = []
-    this.data = data
-  }
-
-  addAdjacent(vertex: GraphNode<T>) {
-    this.adjacents.push(vertex)
-  }
-}
-
 class DiGraph<T> {
   vertices: T[]
   adjacents: Map<T, T[]>
