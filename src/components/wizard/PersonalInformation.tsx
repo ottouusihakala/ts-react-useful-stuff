@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect, useRef} from 'react'
 import SubmitButton from "./SubmitButton"
 import WizardContext, { PersonalInformation, StageState, WizardStage } from '@/src/context/WizardContext'
 import {useForm} from 'react-hook-form'
@@ -10,15 +10,31 @@ interface Fields {
   isEmployed?: boolean
 }
 
+export function usePrevious<T>(value: T | undefined) {
+  const ref = useRef<T | undefined>()
+  useEffect(() => {
+    ref.current = value
+  }, [value])
+  return ref.current
+}
+
 const WizardPersonalInformation = () => {
-  const {update, data: { personalInformation }} = useContext(WizardContext)
+  const {currentStage, update, data: { personalInformation }} = useContext(WizardContext)
   const defaultValues: Fields = {
     ...personalInformation,
     firstNames: '',
     lastName: '',
   }
   const formMethods = useForm<Fields>({mode: 'onBlur', defaultValues})
-  const {register, handleSubmit} = formMethods
+  const {register, handleSubmit, reset} = formMethods
+  const prevCurrentStage = usePrevious(currentStage)
+
+  useEffect(() => {
+    if (currentStage !== prevCurrentStage) {
+      reset(defaultValues)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStage, prevCurrentStage, reset])
 
   const onSubmit = ({firstNames, lastName, isEmployed}: Fields) => {
     const updatedPersonalInformation: PersonalInformation = {
