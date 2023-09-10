@@ -1,22 +1,32 @@
-import NumberDiGraph from "../NumberDiGraph"
+import DiGraph from "../DiGraph"
 
-describe('NumberNumberDiGraph', () => {
+interface DummyNodeData {
+  complexData: Map<string, string[]>
+}
+
+const getDummyNodeData = (base: string, ...additional: string[]): DummyNodeData => ({
+  complexData: new Map<string, string[]>([[base, additional]])
+})
+
+describe('DiGraph', () => {
   describe('addEdge', () => {
     it('Adds vertices', () => {
-      const graph = new NumberDiGraph()
-      graph.addEdge(1, 2)
-      expect(graph.vertices).toContain(1)
-      expect(graph.vertices).toContain(2)
+      const firstVertex = getDummyNodeData('a', 'b', 'c')
+      const secondVertex = getDummyNodeData('k', 'l', 'm')
+      const graph = new DiGraph<DummyNodeData>()
+      graph.addEdge(firstVertex, secondVertex)
+      expect(graph.vertices).toContain(firstVertex)
+      expect(graph.vertices).toContain(secondVertex)
     })
 
     it('Adds edge from origin to destination vertex', () => {
-      const graph = new NumberDiGraph()
+      const graph = new DiGraph()
       graph.addEdge(1, 2)
       expect(graph.adjacents.get(1)).toContain(2)
     })
 
     it('Does not add edge from destination to vertex', () => {
-      const graph = new NumberDiGraph()
+      const graph = new DiGraph()
       graph.addEdge(1, 2)
       graph.addEdge(2, 3)
       expect(graph.adjacents.get(2)).not.toContain(1)
@@ -24,7 +34,7 @@ describe('NumberNumberDiGraph', () => {
     })
 
     it('Does not add duplicate destination vertices', () => {
-      const graph = new NumberDiGraph()
+      const graph = new DiGraph()
       graph.addEdge(1, 2)
       graph.addEdge(1, 2)
       expect(graph.adjacents.get(1)?.length).toBe(1)
@@ -34,14 +44,14 @@ describe('NumberNumberDiGraph', () => {
 
   describe('removeEdge', () => {
     it('Removes edge from origin to destination', () => {
-      const graph = new NumberDiGraph()
+      const graph = new DiGraph()
       graph.addEdge(1, 2)
       graph.removeEdge(1, 2)
       expect(graph.adjacents.get(1)).not.toContain(2)
     })
 
     it('Does not remove origin nor destination', () => {
-      const graph = new NumberDiGraph()
+      const graph = new DiGraph()
       graph.addEdge(1, 2)
       graph.removeEdge(1, 2)
       expect(graph.vertices).toContain(1)
@@ -49,7 +59,7 @@ describe('NumberNumberDiGraph', () => {
     })
 
     it('Does not remove connection from destination to origin', () => {
-      const graph = new NumberDiGraph()
+      const graph = new DiGraph()
       graph.addEdge(1, 2)
       graph.addEdge(2, 1)
       graph.removeEdge(1, 2)
@@ -60,13 +70,13 @@ describe('NumberNumberDiGraph', () => {
 
   describe('removeVertex', () => {
     it('Removes vertex', () => {
-      const graph = new NumberDiGraph()
+      const graph = new DiGraph()
       graph.addEdge(1, 2)
       graph.removeVertex(2)
       expect(graph.vertices).not.toContain(2)
     })
     it('Removes all edges from the vertex', () => {
-      const graph = new NumberDiGraph()
+      const graph = new DiGraph()
       graph.addEdge(1, 2)
       graph.addEdge(1, 3)
       graph.removeVertex(1)
@@ -74,7 +84,7 @@ describe('NumberNumberDiGraph', () => {
     })
 
     it('Removes all edges to the vertex', () => {
-      const graph = new NumberDiGraph()
+      const graph = new DiGraph()
       graph.addEdge(1, 2)
       graph.addEdge(3, 2)
       graph.removeVertex(2)
@@ -85,7 +95,7 @@ describe('NumberNumberDiGraph', () => {
 
   describe('Depth-first search', () => {
     it('Visits each vertex once', () => {
-      const graph = new NumberDiGraph()
+      const graph = new DiGraph()
       graph.addEdge(1, 2)
       graph.addEdge(2, 3)
       graph.addEdge(3, 4)
@@ -100,7 +110,7 @@ describe('NumberNumberDiGraph', () => {
 
   describe('Breadth-first search', () => {
     it('Visits each vertex once', () => {
-      const graph = new NumberDiGraph()
+      const graph = new DiGraph()
       graph.addEdge(1, 2)
       graph.addEdge(1, 3)
       graph.addEdge(2, 4)

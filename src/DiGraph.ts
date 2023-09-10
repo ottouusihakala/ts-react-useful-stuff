@@ -1,34 +1,48 @@
-class NumberDiGraph {
-  vertices: number[]
-  adjacents: Map<number, number[]>
-  
+class GraphNode<T> {
+  adjacents: GraphNode<T>[]
+  data: T
+
+  constructor(data: T) {
+    this.adjacents = []
+    this.data = data
+  }
+
+  addAdjacent(vertex: GraphNode<T>) {
+    this.adjacents.push(vertex)
+  }
+}
+
+class DiGraph<T> {
+  vertices: T[]
+  adjacents: Map<T, T[]>
+
   constructor() {
     this.vertices = []
     this.adjacents = new Map()
   }
 
-  addEdge(originVertex: number, destinationVertex: number) {
-    this.vertices.push(originVertex)
-    this.vertices.push(destinationVertex)
-    const adjacentsForOrigin = this.adjacents.get(originVertex) || []
-    if (!adjacentsForOrigin.includes(destinationVertex)) {
-      adjacentsForOrigin.push(destinationVertex)
+  addEdge(origin: T, destination: T) {
+    this.vertices.push(origin)
+    this.vertices.push(destination)
+    const adjacentsForOrigin = this.adjacents.get(origin) || []
+    if (!adjacentsForOrigin.includes(destination)) {
+      adjacentsForOrigin.push(destination)
     }
-    this.adjacents.set(originVertex, adjacentsForOrigin)
+    this.adjacents.set(origin, adjacentsForOrigin)
   }
 
-  addVertex(vertex: number) {
+  addVertex(vertex: T) {
     this.vertices.push(vertex)
   }
 
-  removeEdge(origin: number, destination: number) {
+  removeEdge(origin: T, destination: T) {
     const adjacentsForOrigin = this.adjacents.get(origin)
     if (adjacentsForOrigin) {
       this.adjacents.set(origin, adjacentsForOrigin.filter((v) => v !== destination))
     }
   }
 
-  removeVertex(vertex: number) {
+  removeVertex(vertex: T) {
     const vertexIndex = this.vertices.findIndex((v) => v === vertex)
     if (vertexIndex > -1) {
       this.vertices.splice(vertexIndex)
@@ -40,9 +54,9 @@ class NumberDiGraph {
   }
 
   depthFirstSearch() {
-    const visited: number[] = []
+    const visited: T[] = []
 
-    const search = (vertex: number | undefined) => {
+    const search = (vertex: T | undefined) => {
       if (!vertex || visited.includes(vertex)) {
         return
       }
@@ -56,10 +70,10 @@ class NumberDiGraph {
   }
 
   breadthFirstSearch() {
-    const visited: number[] = []
+    const visited: T[] = []
 
-    const search = (vertex: number | undefined) => {
-      const queue: number[] = []
+    const search = (vertex: T | undefined) => {
+      const queue: T[] = []
 
       if (!vertex || visited.includes(vertex)) {
         return
@@ -90,4 +104,4 @@ class NumberDiGraph {
   }
 }
 
-export default NumberDiGraph
+export default DiGraph
