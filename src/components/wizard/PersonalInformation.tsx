@@ -3,19 +3,13 @@ import SubmitButton from "./SubmitButton"
 import WizardContext, { PersonalInformation, StageState, WizardStage } from '@/src/context/WizardContext'
 import {useForm} from 'react-hook-form'
 import CancelButton from './CancelButton'
+import usePrevious from '@/src/hooks/usePrevious'
+import useObservablesContext from '@/src/hooks/useObservableContextValue'
 
 interface Fields {
   firstNames?: string
   lastName: string
   isEmployed?: boolean
-}
-
-export function usePrevious<T>(value: T | undefined) {
-  const ref = useRef<T | undefined>()
-  useEffect(() => {
-    ref.current = value
-  }, [value])
-  return ref.current
 }
 
 const WizardPersonalInformation = () => {
