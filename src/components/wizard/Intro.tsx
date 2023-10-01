@@ -2,15 +2,16 @@ import { useForm } from "react-hook-form"
 import SubmitButton from "./SubmitButton"
 import { useContext } from "react"
 import WizardContext, { StageState, WizardStage } from "@/src/context/WizardContext"
+import useWizardContext from "@/src/hooks/useWizardContext"
 
 const WizardIntro = () => {
-  const {currentStage, completeStage} = useContext(WizardContext)
+  const {completeStage} = useWizardContext(WizardStage.First)
   const formMethods = useForm()
   const {handleSubmit} = formMethods
   const onSubmit = () => {
     console.log('submit')
-    completeStage(currentStage, {
-      [WizardStage.PersonalInformation]: StageState.Active
+    completeStage({
+      [WizardStage.Second]: StageState.Active
     })
   }
   return (

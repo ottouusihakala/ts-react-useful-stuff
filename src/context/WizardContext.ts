@@ -2,10 +2,12 @@ import React from "react"
 import WizardIntro from "../components/wizard/Intro"
 
 export enum WizardStage {
-  Intro = 'index',
-  PersonalInformation = 'personalInformation',
-  Employment = 'employment',
-  Education = 'education'
+  First = 'first',
+  Second = 'second',
+  Third = 'third',
+  Fourth = 'fourth',
+  Fifth = 'fifth',
+  Sixth = 'sixth'
 }
 
 export enum StageState {
@@ -18,71 +20,39 @@ export enum StageState {
 export type WizardStagesState = {[StageKey in WizardStage]: StageState}
 
 export const defaultStagesState: WizardStagesState = {
-  [WizardStage.Intro]: StageState.Active,
-  [WizardStage.PersonalInformation]: StageState.Inactive,
-  [WizardStage.Employment]: StageState.Inactive,
-  [WizardStage.Education]: StageState.Inactive,
-}
-
-export interface PersonalInformation {
-  firstNames: string | undefined
-  lastName: string
-  dateOfBirth: string | undefined
-  isEmployed?: boolean
-}
-
-interface Address {
-  streetAddress: string
-  postalCode: string
-  postOffice: string
-}
-
-interface Employment {
-  startDate: string
-  endDate?: string
-  employer: string
-}
-
-interface EmploymentInformation {
-  isEmployed?: boolean
-  employments?: Employment[]
-}
-
-interface Degree {
-  title: string
-  organisation?: string
-  type?: 'highschool' | 'uppersecondary' | 'university' | 'college' | 'vocation'
-}
-
-interface Education {
-  primarySchool?: boolean
-  lowerSecondarySchool?: boolean
-  degrees?: Degree[]
+  [WizardStage.First]: StageState.Active,
+  [WizardStage.Second]: StageState.Inactive,
+  [WizardStage.Third]: StageState.Inactive,
+  [WizardStage.Fourth]: StageState.Inactive,
+  [WizardStage.Fifth]: StageState.Inactive,
+  [WizardStage.Sixth]: StageState.Inactive,
 }
 
 export interface WizardData {
-  personalInformation?: PersonalInformation
-  address?: Address
-  employment?: EmploymentInformation
-  education?: Education
+  firstForm?: Record<string, string | undefined>
+  secondForm?: Record<string, string | undefined>
+  thirdForm?: Record<string, string | undefined>
+  fourthForm?: Record<string, string | undefined>
+  fifthForm?: Record<string, string | undefined>
+  sixthForm?: Record<string, string | undefined>
 }
 
 interface WizardContextType {
   currentStage: WizardStage
   stagesState: WizardStagesState
-  setStagesState: (stagesState: WizardStagesState) => void
-  completeStage: (currentStage: WizardStage, followUpStagesState?: Partial<WizardStagesState>) => void
   data: WizardData
-  update: (dataUpdate: Partial<WizardData>, followUpStagesState?: Partial<WizardStagesState>) => void
+  setCurrentStage: (stage: WizardStage) => void
+  setStagesState: (stagesStateUpdate: Partial<WizardStagesState>) => void
+  setData: (dataUpdate: Partial<WizardData>) => void
 }
 
 const WizardContext = React.createContext<WizardContextType>({
-  currentStage: WizardStage.Intro,
+  currentStage: WizardStage.First,
   stagesState: defaultStagesState,
-  setStagesState: (newStagesState) => {},
-  completeStage: () => {},
   data: {},
-  update: () => {}
+  setCurrentStage: (stage: WizardStage) => {},
+  setStagesState: (stagesStateUpdate: Partial<WizardStagesState>) => {},
+  setData: (dataUpdate: Partial<WizardData>) => {}
 })
 
 export default WizardContext

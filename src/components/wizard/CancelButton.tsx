@@ -1,30 +1,23 @@
 import WizardContext, { StageState, WizardData, WizardStage, WizardStagesState } from "@/src/context/WizardContext"
+import { getCurrentStage } from "@/src/context/WizardContextProvider"
+import useWizardContext from "@/src/hooks/useWizardContext"
 import React, {useContext} from 'react'
 
 interface Properties {
   isEditing?: boolean
+  stage: WizardStage
+  previousStage?: WizardStage
 }
 
-const getPreviousStage = (currentStage: WizardStage, stagesState: WizardStagesState, data: WizardData): WizardStage => {
-  const stagesStateAsArray = Object.entries(stagesState) as [WizardStage, StageState][]
-  const currentStageIndex = stagesStateAsArray.findIndex(([stageKey]) => stageKey === currentStage)
-  const [previousStage] = stagesStateAsArray[currentStageIndex - 1]
-  if (currentStage === WizardStage.Education && !data.personalInformation?.isEmployed) {
-    return WizardStage.PersonalInformation
-  }
-  return previousStage
-} 
-
-const CancelButton = ({isEditing}: Properties) => {
-  const {currentStage, stagesState, setStagesState, completeStage, data} = useContext(WizardContext)
+const CancelButton = ({isEditing, previousStage, stage}: Properties) => {
+  const {currentStage, stagesState, setStagesState, completeStage} = useWizardContext(stage)
   const onClick = () => {
     if (isEditing) {
-      completeStage(currentStage)
+      completeStage()
     } else {
-      const previousStage = getPreviousStage(currentStage, stagesState, data)
       setStagesState({
         ...stagesState,
-        [previousStage]: StageState.Active,
+        ...(previousStage ? { [previousStage]: StageState.Active } : {}),
         [currentStage]: StageState.Inactive,
       })
     }

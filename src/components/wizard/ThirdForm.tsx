@@ -1,17 +1,18 @@
+import { WizardStage } from "@/src/context/WizardContext"
 import CancelButton from "./CancelButton"
 import SubmitButton from "./SubmitButton"
 
-const WizardEmployment = () => {
+const WizardThirdForm = () => {
   return (
     <form>
       <div>
-        <label>Employer Name</label>
+        <label>label</label>
         <input type="text" />
       </div>
       <SubmitButton>Next</SubmitButton>
-      <CancelButton />
+      <CancelButton stage={WizardStage.Fourth} />
     </form>
   )
 }
 
-export default WizardEmployment
+export default WizardThirdForm
