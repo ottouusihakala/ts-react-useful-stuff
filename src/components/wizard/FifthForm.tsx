@@ -5,6 +5,7 @@ import SubmitButton from "./SubmitButton"
 const WizardFifthForm = () => {
   return (
     <form>
+      <h1>Sixth Stage - Fifth Form</h1>
       <div>
         <label>label</label>
         <input type="text" />

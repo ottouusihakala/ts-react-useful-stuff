@@ -16,11 +16,12 @@ const useWizardContext = (stage: WizardStage) => {
   }
   const update = (dataUpdate: Partial<WizardData>, followUpStagesState?: Partial<WizardStagesState>) => {
     setData(dataUpdate)
-    setStagesState({
+    const newSubstageState = {
       ...stagesState,
       [stage]: StageState.Done,
       ...followUpStagesState,
-    })
+    }
+    setStagesState(newSubstageState)
   }
 
   useEffect(() => {

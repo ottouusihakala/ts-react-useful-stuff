@@ -9,13 +9,13 @@ const WizardIntro = () => {
   const formMethods = useForm()
   const {handleSubmit} = formMethods
   const onSubmit = () => {
-    console.log('submit')
     completeStage({
       [WizardStage.Second]: StageState.Active
     })
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <h1>First Stage - Intro</h1>
       <p>This is a multipart form as a wizard.</p>
       <p>Click on Next to proceed.</p>
       <SubmitButton>Next</SubmitButton>

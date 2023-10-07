@@ -10,6 +10,7 @@ import useWizardContext from '@/src/hooks/useWizardContext'
 interface Fields {
   firstNames?: string
   lastName: string
+  moveToFourth?: boolean
 }
 
 const WizardFirstForm = () => {
@@ -31,7 +32,7 @@ const WizardFirstForm = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStage, prevCurrentStage, reset])
 
-  const onSubmit = ({firstNames, lastName}: Fields) => {
+  const onSubmit = ({firstNames, lastName, moveToFourth}: Fields) => {
     const updatedPersonalInformation: Record<string, string | undefined> = {
       ...firstForm,
       firstNames,
@@ -39,15 +40,17 @@ const WizardFirstForm = () => {
       dateOfBirth: undefined
     }
 
-    console.log('submit')
-
     update({
       secondForm: updatedPersonalInformation
+    }, {
+      [WizardStage.Third]: !moveToFourth ? StageState.Active : StageState.Inactive,
+      [WizardStage.Fourth]: !!moveToFourth ? StageState.Active : StageState.Inactive
     })
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <h1>Second Stage - First Form</h1>
       <div>
         <label>First name</label>
         <input {...register('firstNames', {
@@ -59,6 +62,13 @@ const WizardFirstForm = () => {
         <input
           {...register('lastName', {required: true})}
           type="text"
+        />
+      </div>
+      <div>
+        <label>Move to Fourth stage</label>
+        <input
+          {...register('moveToFourth')}
+          type="checkbox"
         />
       </div>
       <SubmitButton>Next</SubmitButton>
